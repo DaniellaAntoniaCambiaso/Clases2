@@ -99,21 +99,25 @@ G<-reshape(E,direction = 'wide',timevar = 'Sexo',v.names = c('AvAge','Casos conf
 
 #---- Part 2: Visualization  -------------------
 
-#Scatter plot
+#Scatter plot    R funciona en capas cuando grafica
 #Base R 
 plot(G$`Casos confirmados.Femenino`,G$`Casos confirmados.Masculino`)
 text(x =G$`Casos confirmados.Femenino`,y=G$`Casos confirmados.Masculino`, G$`Centro de salud`,cex=0.5)
 
 #ggplot2
 library(ggplot2)
+
+ggplot(data = E,mapping = aes(x=AvAge,y=`Casos confirmados`))+geom_point()
+ggplot(G,aes(x=`Casos confirmados.Femenino`,y=`Casos confirmados.Masculino`))+geom_point(aes(size=AvAge.Femenino,colour=AvAge.Masculino))
+
 ggplot(data = G,mapping = aes(x=`Casos confirmados.Femenino`,y=`Casos confirmados.Masculino`))+geom_point()
 
-ggplot(G,aes(x=`Casos confirmados.Femenino`,y=`Casos confirmados.Masculino`))+geom_point(aes(size=AvAge.Femenino,colour=AvAge.Masculino))+geom_text(aes(label=`Centro de salud`),size=2,check_overlap = T)
+p1<-ggplot(G,aes(x=`Casos confirmados.Femenino`,y=`Casos confirmados.Masculino`))+geom_point(aes(size=AvAge.Femenino,colour=AvAge.Masculino))+geom_text(aes(label=`Centro de salud`),size=2,check_overlap = T)
 
 ggplot(data = E,mapping = aes(x=AvAge,y=`Casos confirmados`))+geom_point()+facet_wrap(~Sexo)+geom_smooth(method = 'lm',se=F) + geom_smooth(method = 'loess',col='red',se=F)
+ggplot(data = E,mapping = aes(x=AvAge,y=`Casos confirmados`))+geom_point()+facet_wrap(~Sexo)
 
-
-#plotly
+install.packages('plotly')
 library(plotly)
 ggplotly(p1)
 
